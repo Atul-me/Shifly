@@ -1,0 +1,25 @@
+{
+  "cities": [
+    {
+      "id": "1",
+      "name": "Delhi",
+      "image": "https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg",
+      "properties": 120,
+      "description": "Capital city with diverse property options"
+    },
+    {
+      "id": "2", 
+      "name": "Noida",
+      "image": "https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg",
+      "properties": 85,
+      "description": "IT hub with modern infrastructure"
+    },
+    {
+      "id": "3",
+      "name": "Gurgaon", 
+      "image": "https://images.pexels.com/photos/280221/pexels-photo-280221.jpeg",
+      "properties": 95,
+      "description": "Corporate center with luxury properties"
+    }
+  ]
+}
