@@ -103,7 +103,13 @@ export default function LoginScreen() {
 
             <Button
               mode="text"
-              onPress={() => router.back()}
+              onPress={() => {
+                if (router.canGoBack()) {
+                  router.back();
+                } else {
+                  router.replace('/(tabs)');
+                }
+              }}
               style={styles.backButton}
               textColor="#fff"
             >
