@@ -6,7 +6,6 @@ import { router } from 'expo-router';
 import { CityCard } from '../../components/CityCard';
 import { PropertyCard } from '../../components/PropertyCard';
 import { DrawerModal } from '../../components/DrawerModal';
-import { DrawerModal } from '@/components/DrawerModal';
 import { useApp } from '../../context/AppContext';
 import { useAuth } from '../../context/AuthContext';
 import citiesData from '../../data/cities.json';
