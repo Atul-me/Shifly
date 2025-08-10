@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Card, IconButton } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { ArrowLeft, Building, Home, Store, Warehouse } from 'lucide-react-native';
+import { ArrowLeft, Building, Chrome as Home, Store, Warehouse } from 'lucide-react-native';
 
 const propertyTypes = [
   {

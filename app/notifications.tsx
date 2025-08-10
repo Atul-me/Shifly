@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Card, IconButton, Chip } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { ArrowLeft, Bell, Home, Heart, MessageCircle } from 'lucide-react-native';
+import { ArrowLeft, Bell, Chrome as Home, Heart, MessageCircle } from 'lucide-react-native';
 
 interface Notification {
   id: string;
