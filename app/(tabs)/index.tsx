@@ -5,14 +5,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { CityCard } from '../../components/CityCard';
 import { PropertyCard } from '../../components/PropertyCard';
+import { DrawerModal } from '../../components/DrawerModal';
 import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 import citiesData from '../../data/cities.json';
 import propertiesData from '../../data/properties.json';
-import { Menu } from 'lucide-react-native';
+import { Menu, Bell } from 'lucide-react-native';
 
 export default function HomeScreen() {
   const { filters, updateFilters, searchQuery, setSearchQuery } = useApp();
+  const { isAuthenticated } = useAuth();
   const [searchValue, setSearchValue] = useState('');
+  const [showDrawer, setShowDrawer] = useState(false);
 
   // Get trending properties
   const trendingProperties = propertiesData.properties.filter(p => p.trending).slice(0, 5);
@@ -40,16 +44,26 @@ export default function HomeScreen() {
     updateFilters({ type });
   };
 
+  const handlePostProperty = () => {
+    if (!isAuthenticated) {
+      router.push('/auth/login');
+    } else {
+      router.push('/(tabs)/post');
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setShowDrawer(true)}>
             <Menu size={24} color="#2c3e50" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>PropertyHub</Text>
-          <View />
+          <Text style={styles.headerTitle}>Shifly</Text>
+          <TouchableOpacity onPress={() => router.push('/notifications')}>
+            <Bell size={24} color="#2c3e50" />
+          </TouchableOpacity>
         </View>
 
         {/* Search Bar */}
@@ -78,13 +92,6 @@ export default function HomeScreen() {
             style={styles.toggleButton}
           >
             Rent
-          </Button>
-          <Button
-            mode="outlined"
-            onPress={() => router.push('/post')}
-            style={styles.toggleButton}
-          >
-            Sell
           </Button>
         </View>
 
@@ -140,6 +147,11 @@ export default function HomeScreen() {
           ))}
         </View>
       </ScrollView>
+
+      <DrawerModal
+        visible={showDrawer}
+        onDismiss={() => setShowDrawer(false)}
+      />
     </SafeAreaView>
   );
 }

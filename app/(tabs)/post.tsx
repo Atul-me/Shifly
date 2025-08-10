@@ -7,6 +7,18 @@ import { router } from 'expo-router';
 
 export default function PostPropertyScreen() {
   const { isAuthenticated } = useAuth();
+
+  // Redirect to login if not authenticated
+  React.useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace('/auth/login');
+    }
+  }, [isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return null; // Will redirect
+  }
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -24,18 +36,6 @@ export default function PostPropertyScreen() {
   const bhkOptions = [1, 2, 3, 4, 5];
 
   const handleSubmit = () => {
-    if (!isAuthenticated) {
-      Alert.alert(
-        'Login Required',
-        'Please login to post a property',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Login', onPress: () => router.push('/auth/login') }
-        ]
-      );
-      return;
-    }
-
     // Validate form
     if (!formData.title || !formData.price || !formData.location || !formData.city) {
       Alert.alert('Error', 'Please fill all required fields');

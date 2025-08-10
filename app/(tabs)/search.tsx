@@ -68,6 +68,14 @@ export default function SearchScreen() {
           value={searchValue}
           onSubmitEditing={handleSearch}
           style={styles.searchBar}
+          right={() => (
+            <TouchableOpacity 
+              onPress={() => setShowFilters(true)}
+              style={styles.filterIcon}
+            >
+              <Filter size={20} color="#7f8c8d" />
+            </TouchableOpacity>
+          )}
         />
       </View>
 
@@ -128,6 +136,13 @@ const styles = StyleSheet.create({
   searchBar: {
     backgroundColor: '#f1f2f6',
     elevation: 0,
+    paddingRight: 50,
+  },
+  filterIcon: {
+    position: 'absolute',
+    right: 12,
+    top: 12,
+    padding: 8,
   },
   resultsHeader: {
     padding: 20,
