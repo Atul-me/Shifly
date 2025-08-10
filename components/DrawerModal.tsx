@@ -3,22 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { Modal, Portal, Divider } from 'react-native-paper';
 import { router } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
-import { 
-  Home, 
-  Building, 
-  ChevronDown, 
-  CreditCard, 
-  Search, 
-  BookOpen, 
-  FileText, 
-  Upload, 
-  Heart, 
-  Calendar, 
-  Settings, 
-  Bell, 
-  LogOut, 
-  UserPlus 
-} from 'lucide-react-native';
+import { Chrome as Home, Building, ChevronDown, CreditCard, Search, BookOpen, FileText, Upload, Heart, Calendar, Settings, Bell, LogOut, UserPlus } from 'lucide-react-native';
 
 interface DrawerModalProps {
   visible: boolean;
