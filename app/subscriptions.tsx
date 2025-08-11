@@ -3,61 +3,86 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, Card, Button, IconButton, Chip } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { useAuth } from '../context/AuthContext';
 import { ArrowLeft, Check, Star } from 'lucide-react-native';
 
 const subscriptionPlans = [
   {
     id: '1',
-    name: 'Basic',
-    price: 'Free',
-    duration: 'Forever',
+    name: 'Free',
+    price: '$0',
+    duration: 'forever',
     features: [
       'Browse properties',
       'Basic search filters',
-      'Contact agents',
-      'Save up to 5 favorites',
+      '5 messages per month',
+      'Save favorites',
     ],
     popular: false,
     buttonText: 'Current Plan',
     disabled: true,
+    plan: 'free' as const,
   },
   {
     id: '2',
-    name: 'Premium',
-    price: '₹299',
+    name: 'Basic',
+    price: '$5',
     duration: 'per month',
     features: [
-      'All Basic features',
+      'All Free features',
       'Advanced search filters',
-      'Unlimited favorites',
+      '50 messages per month',
       'Priority customer support',
-      'Property alerts',
-      'Market insights',
     ],
-    popular: true,
+    popular: false,
     buttonText: 'Upgrade Now',
     disabled: false,
+    plan: 'basic' as const,
   },
   {
     id: '3',
-    name: 'Agent Pro',
-    price: '₹999',
+    name: 'Pro',
+    price: '$10',
     duration: 'per month',
     features: [
-      'All Premium features',
-      'Post unlimited properties',
-      'Featured listings',
-      'Lead management',
-      'Analytics dashboard',
+      'All Basic features',
+      'Unlimited messages',
+      'Priority support',
+      'Advanced analytics',
+    ],
+    popular: true,
+    buttonText: 'Choose Plan',
+    disabled: false,
+    plan: 'pro' as const,
+  },
+  {
+    id: '4',
+    name: 'Enterprise',
+    price: '$25',
+    duration: 'per month',
+    features: [
+      'All Pro features',
+      'Unlimited messages',
+      'Priority Support',
       'Dedicated account manager',
+      'Custom integrations',
     ],
     popular: false,
     buttonText: 'Choose Plan',
     disabled: false,
+    plan: 'enterprise' as const,
   },
 ];
 
 export default function SubscriptionsScreen() {
+  const { user, updateSubscription } = useAuth();
+
+  const handleSelectPlan = (plan: 'basic' | 'pro' | 'enterprise') => {
+    updateSubscription(plan);
+    alert(`Successfully subscribed to ${plan} plan!`);
+    router.back();
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -101,12 +126,12 @@ export default function SubscriptionsScreen() {
               
               <Button
                 mode={plan.popular ? 'contained' : 'outlined'}
-                onPress={() => console.log(`Selected ${plan.name} plan`)}
-                disabled={plan.disabled}
+                onPress={() => plan.plan !== 'free' ? handleSelectPlan(plan.plan) : null}
+                disabled={plan.disabled || user?.subscription === plan.plan}
                 style={[styles.planButton, plan.popular && styles.popularButton]}
                 contentStyle={styles.buttonContent}
               >
-                {plan.buttonText}
+                {user?.subscription === plan.plan ? 'Current Plan' : plan.buttonText}
               </Button>
             </Card.Content>
           </Card>

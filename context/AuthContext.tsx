@@ -3,18 +3,41 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface User {
   id: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
-  phone: string;
+  phone_number: string;
+  age: string;
+  sex: string;
+  role: string;
+  subscription: 'free' | 'basic' | 'pro' | 'enterprise';
+  messagesUsed: number;
+  messagesLimit: number;
 }
 
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
-  register: (userData: Omit<User, 'id'> & { password: string }) => Promise<boolean>;
+  register: (userData: RegisterData) => Promise<boolean>;
+  verifyOTP: (otp: string) => Promise<boolean>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
+  updateSubscription: (plan: 'basic' | 'pro' | 'enterprise') => void;
+  incrementMessageCount: () => boolean;
+  pendingUser: RegisterData | null;
+}
+
+interface RegisterData {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone_number: string;
+  password: string;
+  age: string;
+  sex: string;
+  role: string;
+  tnc_agreement: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,6 +53,7 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [pendingUser, setPendingUser] = useState<RegisterData | null>(null);
 
   useEffect(() => {
     checkAuthStatus();
@@ -57,9 +81,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (email && password) {
         const userData: User = {
           id: '1',
-          name: 'John Doe',
+          first_name: 'John',
+          last_name: 'Doe',
           email,
-          phone: '+91-9876543210'
+          phone_number: '+91-9876543210',
+          age: '30',
+          sex: 'M',
+          role: 'both',
+          subscription: 'free',
+          messagesUsed: 0,
+          messagesLimit: 5
         };
         
         await AsyncStorage.setItem('user', JSON.stringify(userData));
@@ -73,20 +104,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const register = async (userData: Omit<User, 'id'> & { password: string }): Promise<boolean> => {
+  const register = async (userData: RegisterData): Promise<boolean> => {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const newUser: User = {
-        id: Date.now().toString(),
-        name: userData.name,
-        email: userData.email,
-        phone: userData.phone
-      };
-      
-      await AsyncStorage.setItem('user', JSON.stringify(newUser));
-      setUser(newUser);
+      // Store pending user data for OTP verification
+      setPendingUser(userData);
       return true;
     } catch (error) {
       console.error('Register error:', error);
@@ -94,10 +118,81 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const verifyOTP = async (otp: string): Promise<boolean> => {
+    try {
+      // Mock OTP verification (correct OTP is 123456)
+      if (otp === '123456' && pendingUser) {
+        const newUser: User = {
+          id: Date.now().toString(),
+          first_name: pendingUser.first_name,
+          last_name: pendingUser.last_name,
+          email: pendingUser.email,
+          phone_number: pendingUser.phone_number,
+          age: pendingUser.age,
+          sex: pendingUser.sex,
+          role: pendingUser.role,
+          subscription: 'free',
+          messagesUsed: 0,
+          messagesLimit: 5
+        };
+        
+        await AsyncStorage.setItem('user', JSON.stringify(newUser));
+        setUser(newUser);
+        setPendingUser(null);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('OTP verification error:', error);
+      return false;
+    }
+  };
+
+  const updateSubscription = (plan: 'basic' | 'pro' | 'enterprise') => {
+    if (user) {
+      const limits = {
+        basic: 50,
+        pro: -1, // unlimited
+        enterprise: -1 // unlimited
+      };
+      
+      const updatedUser = {
+        ...user,
+        subscription: plan,
+        messagesLimit: limits[plan],
+        messagesUsed: 0
+      };
+      
+      setUser(updatedUser);
+      AsyncStorage.setItem('user', JSON.stringify(updatedUser));
+    }
+  };
+
+  const incrementMessageCount = (): boolean => {
+    if (user) {
+      if (user.subscription === 'free' && user.messagesUsed >= user.messagesLimit) {
+        return false; // Limit reached
+      }
+      
+      if (user.messagesLimit !== -1) { // Not unlimited
+        const updatedUser = {
+          ...user,
+          messagesUsed: user.messagesUsed + 1
+        };
+        
+        setUser(updatedUser);
+        AsyncStorage.setItem('user', JSON.stringify(updatedUser));
+      }
+      return true;
+    }
+    return false;
+  };
+
   const logout = async () => {
     try {
       await AsyncStorage.removeItem('user');
       setUser(null);
+      setPendingUser(null);
     } catch (error) {
       console.error('Logout error:', error);
     }
@@ -110,8 +205,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading, 
         login, 
         register, 
+        verifyOTP,
         logout, 
-        isAuthenticated: !!user 
+        isAuthenticated: !!user,
+        updateSubscription,
+        incrementMessageCount,
+        pendingUser
       }}
     >
       {children}

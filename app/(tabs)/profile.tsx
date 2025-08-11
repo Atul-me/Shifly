@@ -193,6 +193,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#7f8c8d',
   },
+  userSubscription: {
+    fontSize: 14,
+    color: '#3498db',
+    fontWeight: '500',
+    marginTop: 4,
+  },
   menuCard: {
     marginBottom: 20,
     borderRadius: 12,

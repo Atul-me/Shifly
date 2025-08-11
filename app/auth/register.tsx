@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { Text, TextInput, Button, Card } from 'react-native-paper';
+import { Text, TextInput, Button, Card, Checkbox, Menu } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useAuth } from '../../context/AuthContext';
@@ -9,17 +9,29 @@ import { LinearGradient } from 'expo-linear-gradient';
 export default function RegisterScreen() {
   const { register } = useAuth();
   const [formData, setFormData] = useState({
-    name: '',
+    first_name: '',
+    last_name: '',
     email: '',
-    phone: '',
+    phone_number: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    age: '',
+    sex: '',
+    role: 'both',
+    tnc_agreement: false
   });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showSexMenu, setShowSexMenu] = useState(false);
+
+  const sexOptions = [
+    { label: 'Male', value: 'M' },
+    { label: 'Female', value: 'F' },
+    { label: 'Other', value: 'Other' }
+  ];
 
   const handleRegister = async () => {
-    if (!formData.name || !formData.email || !formData.phone || !formData.password) {
+    if (!formData.first_name || !formData.last_name || !formData.email || !formData.phone_number || !formData.password || !formData.age || !formData.sex) {
       alert('Please fill all fields');
       return;
     }
@@ -34,17 +46,17 @@ export default function RegisterScreen() {
       return;
     }
 
+    if (!formData.tnc_agreement) {
+      alert('Please accept the terms and conditions');
+      return;
+    }
+
     setLoading(true);
     try {
-      const success = await register({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        password: formData.password
-      });
+      const success = await register(formData);
       
       if (success) {
-        router.replace('/(tabs)');
+        router.push('/auth/otp-verification');
       } else {
         alert('Registration failed. Please try again.');
       }
@@ -74,9 +86,16 @@ export default function RegisterScreen() {
             <Card style={styles.card}>
               <Card.Content style={styles.cardContent}>
                 <TextInput
-                  label="Full Name"
-                  value={formData.name}
-                  onChangeText={(text) => setFormData({...formData, name: text})}
+                  label="First Name"
+                  value={formData.first_name}
+                  onChangeText={(text) => setFormData({...formData, first_name: text})}
+                  style={styles.input}
+                />
+
+                <TextInput
+                  label="Last Name"
+                  value={formData.last_name}
+                  onChangeText={(text) => setFormData({...formData, last_name: text})}
                   style={styles.input}
                 />
 
@@ -91,11 +110,45 @@ export default function RegisterScreen() {
 
                 <TextInput
                   label="Phone Number"
-                  value={formData.phone}
-                  onChangeText={(text) => setFormData({...formData, phone: text})}
+                  value={formData.phone_number}
+                  onChangeText={(text) => setFormData({...formData, phone_number: text})}
                   keyboardType="phone-pad"
                   style={styles.input}
                 />
+
+                <TextInput
+                  label="Age"
+                  value={formData.age}
+                  onChangeText={(text) => setFormData({...formData, age: text})}
+                  keyboardType="numeric"
+                  style={styles.input}
+                />
+
+                <Menu
+                  visible={showSexMenu}
+                  onDismiss={() => setShowSexMenu(false)}
+                  anchor={
+                    <TextInput
+                      label="Sex"
+                      value={sexOptions.find(opt => opt.value === formData.sex)?.label || ''}
+                      onFocus={() => setShowSexMenu(true)}
+                      right={<TextInput.Icon icon="chevron-down" />}
+                      style={styles.input}
+                      editable={false}
+                    />
+                  }
+                >
+                  {sexOptions.map((option) => (
+                    <Menu.Item
+                      key={option.value}
+                      onPress={() => {
+                        setFormData({...formData, sex: option.value});
+                        setShowSexMenu(false);
+                      }}
+                      title={option.label}
+                    />
+                  ))}
+                </Menu>
 
                 <TextInput
                   label="Password"
@@ -119,11 +172,21 @@ export default function RegisterScreen() {
                   style={styles.input}
                 />
 
+                <View style={styles.checkboxContainer}>
+                  <Checkbox
+                    status={formData.tnc_agreement ? 'checked' : 'unchecked'}
+                    onPress={() => setFormData({...formData, tnc_agreement: !formData.tnc_agreement})}
+                  />
+                  <Text style={styles.checkboxText}>
+                    I agree to the Terms and Conditions
+                  </Text>
+                </View>
+
                 <Button
                   mode="contained"
                   onPress={handleRegister}
                   loading={loading}
-                  disabled={loading}
+                  disabled={loading || !formData.tnc_agreement}
                   style={styles.registerButton}
                   contentStyle={styles.registerButtonContent}
                 >
@@ -232,5 +295,16 @@ const styles = StyleSheet.create({
   backButton: {
     marginTop: 24,
     alignSelf: 'center',
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  checkboxText: {
+    fontSize: 14,
+    color: '#34495e',
+    marginLeft: 8,
+    flex: 1,
   },
 });
