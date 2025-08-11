@@ -105,6 +105,17 @@ export default function PropertyDetailScreen() {
     }, 2000);
   };
 
+  const handleContactAgent = () => {
+    Alert.alert(
+      'Contact Agent',
+      `Would you like to call ${property.agent.name}?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Call', onPress: () => console.log('Calling agent') }
+      ]
+    );
+  };
+
   const renderChatMessage = ({ item }: { item: ChatMessage }) => (
     <View style={[
       styles.messageContainer,
@@ -309,16 +320,30 @@ export default function PropertyDetailScreen() {
         <Card style={styles.card}>
           <Card.Content>
             <Text style={styles.sectionTitle}>Agent Information</Text>
-            <View style={styles.agentInfo}>
-              <Text style={styles.agentName}>{property.agent.name}</Text>
-              <Text style={styles.agentContact}>{property.agent.phone}</Text>
-              <Text style={styles.agentContact}>{property.agent.email}</Text>
+            <View style={styles.agentContainer}>
+              <View style={styles.agentInfo}>
+                <Text style={styles.agentName}>{property.agent.name}</Text>
+                <Text style={styles.agentContact}>{property.agent.phone}</Text>
+                <Text style={styles.agentContact}>{property.agent.email}</Text>
+              </View>
             </View>
           </Card.Content>
         </Card>
 
         <View style={styles.bottomSpace} />
       </ScrollView>
+
+      {/* Bottom Actions */}
+      <View style={styles.bottomActions}>
+        <Button
+          mode="contained"
+          onPress={handleContactAgent}
+          style={styles.contactButton}
+          contentStyle={styles.contactButtonContent}
+        >
+          Contact Agent
+        </Button>
+      </View>
     </SafeAreaView>
   );
 }
@@ -542,187 +567,6 @@ const styles = StyleSheet.create({
   },
   subscribeButton: {
     borderRadius: 8,
-  },
-  agentInfo: {
-    alignItems: 'center',
-  },
-  agentName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 4,
-  },
-  agentContact: {
-    fontSize: 14,
-    color: '#7f8c8d',
-    marginBottom: 2,
-  },
-  bottomSpace: {
-    height: 20,
-  },
-});
-              </View>
-            </View>
-          </Card.Content>
-        </Card>
-
-        <View style={styles.bottomSpace} />
-      </ScrollView>
-
-      {/* Bottom Actions */}
-      <View style={styles.bottomActions}>
-        <Button
-          mode="contained"
-          onPress={handleContactAgent}
-          style={styles.contactButton}
-          contentStyle={styles.contactButtonContent}
-        >
-          Contact Agent
-        </Button>
-      </View>
-    </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    paddingHorizontal: 10,
-  },
-  headerActions: {
-    flexDirection: 'row',
-  },
-  scrollView: {
-    flex: 1,
-  },
-  imageContainer: {
-    position: 'relative',
-    height: 300,
-  },
-  propertyImage: {
-    width: 400,
-    height: 300,
-    resizeMode: 'cover',
-  },
-  imageIndicators: {
-    position: 'absolute',
-    bottom: 16,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 8,
-  },
-  indicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  badgeContainer: {
-    position: 'absolute',
-    top: 16,
-    left: 16,
-    flexDirection: 'row',
-    gap: 8,
-  },
-  trendingBadge: {
-    backgroundColor: '#e74c3c',
-    height: 28,
-  },
-  verifiedBadge: {
-    backgroundColor: '#27ae60',
-    height: 28,
-  },
-  badgeText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  detailsCard: {
-    margin: 16,
-    borderRadius: 12,
-  },
-  priceContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  price: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-  },
-  typeChip: {
-    backgroundColor: '#3498db',
-    height: 32,
-  },
-  typeText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#2c3e50',
-    marginBottom: 8,
-  },
-  locationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-    gap: 6,
-  },
-  location: {
-    fontSize: 16,
-    color: '#7f8c8d',
-    flex: 1,
-  },
-  specs: {
-    flexDirection: 'row',
-    gap: 20,
-  },
-  specItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  specText: {
-    fontSize: 14,
-    color: '#34495e',
-    fontWeight: '500',
-  },
-  card: {
-    margin: 16,
-    marginTop: 0,
-    borderRadius: 12,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 12,
-  },
-  description: {
-    fontSize: 14,
-    color: '#34495e',
-    lineHeight: 22,
-  },
-  amenitiesContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  amenityChip: {
-    marginBottom: 8,
   },
   agentContainer: {
     flexDirection: 'row',
