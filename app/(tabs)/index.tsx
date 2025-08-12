@@ -13,7 +13,7 @@ import propertiesData from '../../data/properties.json';
 import { Menu, Bell, Filter  } from 'lucide-react-native';
 
 export default function HomeScreen() {
-  const { filters, updateFilters, searchQuery, setSearchQuery } = useApp([]);
+  const { filters, updateFilters, searchQuery, setSearchQuery } = useApp();
   const { isAuthenticated } = useAuth();
   const [searchValue, setSearchValue] = useState('');
   const [showDrawer, setShowDrawer] = useState(false);
