@@ -26,12 +26,12 @@ export const DrawerModal: React.FC<DrawerModalProps> = ({ visible, onDismiss }) 
   const menuItems = [
     {
       title: 'Home',
-      icon: () => <Home size={20} color="#e74c3c" />,
+      icon: () => <Home size={20} color="#3498db" />,
       onPress: () => handleNavigation('/(tabs)'),
     },
     {
       title: 'Property Types',
-      icon: () => <Building size={20} color="#e74c3c" />,
+      icon: () => <Building size={20} color="#3498db" />,
       hasDropdown: true,
       onPress: () => handleNavigation('/property-types'),
     },
@@ -40,27 +40,27 @@ export const DrawerModal: React.FC<DrawerModalProps> = ({ visible, onDismiss }) 
   const userItems = [
     {
       title: 'Subscriptions',
-      icon: () => <CreditCard size={20} color="#e74c3c" />,
+      icon: () => <CreditCard size={20} color="#3498db" />,
       onPress: () => handleNavigation('/subscriptions'),
     },
     {
       title: 'Customize Search',
-      icon: () => <Search size={20} color="#e74c3c" />,
+      icon: () => <Search size={20} color="#3498db" />,
       onPress: () => handleNavigation('/customize-search'),
     },
     {
       title: 'Agent Guide',
-      icon: () => <BookOpen size={20} color="#e74c3c" />,
+      icon: () => <BookOpen size={20} color="#3498db" />,
       onPress: () => handleNavigation('/agent-guide'),
     },
     {
       title: 'Listing posts',
-      icon: () => <FileText size={20} color="#e74c3c" />,
+      icon: () => <FileText size={20} color="#3498db" />,
       onPress: () => handleNavigation('/listing-posts'),
     },
     {
       title: 'Upload to advertise',
-      icon: () => <Upload size={20} color="#e74c3c" />,
+      icon: () => <Upload size={20} color="#3498db" />,
       onPress: () => handleNavigation('/upload-advertise'),
     },
   ];
@@ -68,22 +68,22 @@ export const DrawerModal: React.FC<DrawerModalProps> = ({ visible, onDismiss }) 
   const otherItems = [
     {
       title: 'Favourite',
-      icon: () => <Heart size={20} color="#e74c3c" />,
+      icon: () => <Heart size={20} color="#3498db" />,
       onPress: () => handleNavigation('/(tabs)/favorites'),
     },
     {
       title: 'Property Events',
-      icon: () => <Calendar size={20} color="#e74c3c" />,
+      icon: () => <Calendar size={20} color="#3498db" />,
       onPress: () => handleNavigation('/property-events'),
     },
     {
       title: 'Settings',
-      icon: () => <Settings size={20} color="#e74c3c" />,
+      icon: () => <Settings size={20} color="#3498db" />,
       onPress: () => handleNavigation('/settings'),
     },
     {
       title: 'Notifications',
-      icon: () => <Bell size={20} color="#e74c3c" />,
+      icon: () => <Bell size={20} color="#3498db" />,
       onPress: () => handleNavigation('/notifications'),
     },
   ];
@@ -108,6 +108,7 @@ export const DrawerModal: React.FC<DrawerModalProps> = ({ visible, onDismiss }) 
                   <Text style={styles.menuItemText}>{item.title}</Text>
                 </View>
                 {item.hasDropdown && <ChevronDown size={16} color="#e74c3c" />}
+                {item.hasDropdown && <ChevronDown size={16} color="#3498db" />}
               </TouchableOpacity>
             ))}
           </View>
@@ -158,13 +159,13 @@ export const DrawerModal: React.FC<DrawerModalProps> = ({ visible, onDismiss }) 
               <>
                 <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('/auth/login')}>
                   <View style={styles.menuItemContent}>
-                    <UserPlus size={20} color="#e74c3c" />
+                    <UserPlus size={20} color="#3498db" />
                     <Text style={styles.menuItemText}>Login</Text>
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('/auth/register')}>
                   <View style={styles.menuItemContent}>
-                    <UserPlus size={20} color="#e74c3c" />
+                    <UserPlus size={20} color="#3498db" />
                     <Text style={styles.menuItemText}>Login with different Id</Text>
                   </View>
                 </TouchableOpacity>
@@ -179,12 +180,17 @@ export const DrawerModal: React.FC<DrawerModalProps> = ({ visible, onDismiss }) 
 
 const styles = StyleSheet.create({
   modal: {
-    backgroundColor: '#4a5568',
+    backgroundColor: '#fff',
     margin: 0,
     marginRight: 80,
     height: '100%',
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20,
+    borderTopRightRadius: 16,
+    borderBottomRightRadius: 16,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 2, height: 0 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
   },
   scrollView: {
     flex: 1,
@@ -195,23 +201,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ecf0f1',
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#e74c3c',
+    color: '#2c3e50',
   },
   closeButton: {
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: '#ecf0f1',
     justifyContent: 'center',
     alignItems: 'center',
   },
   closeText: {
     fontSize: 20,
-    color: '#fff',
+    color: '#2c3e50',
     fontWeight: 'bold',
   },
   section: {
@@ -220,7 +228,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#e74c3c',
+    color: '#3498db',
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
@@ -238,11 +246,11 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     fontSize: 14,
-    color: '#fff',
+    color: '#2c3e50',
     marginLeft: 12,
   },
   divider: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: '#ecf0f1',
     marginVertical: 10,
   },
 });

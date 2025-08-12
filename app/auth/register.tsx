@@ -127,14 +127,16 @@ export default function RegisterScreen() {
                 <Menu
                   visible={showSexMenu}
                   onDismiss={() => setShowSexMenu(false)}
+                  contentStyle={styles.menuContent}
                   anchor={
                     <TextInput
                       label="Sex"
                       value={sexOptions.find(opt => opt.value === formData.sex)?.label || ''}
-                      onFocus={() => setShowSexMenu(true)}
+                      onTouchStart={() => setShowSexMenu(true)}
                       right={<TextInput.Icon icon="chevron-down" />}
                       style={styles.input}
                       editable={false}
+                      showSoftInputOnFocus={false}
                     />
                   }
                 >
@@ -306,5 +308,9 @@ const styles = StyleSheet.create({
     color: '#34495e',
     marginLeft: 8,
     flex: 1,
+  },
+  menuContent: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
   },
 });

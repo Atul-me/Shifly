@@ -13,9 +13,9 @@ export default function TabLayout() {
           backgroundColor: '#fff',
           borderTopWidth: 1,
           borderTopColor: '#ecf0f1',
-          height: 60,
-          paddingBottom: 8,
-          paddingTop: 8,
+          height: 65,
+          paddingBottom: 10,
+          paddingTop: 10,
         },
       }}>
       <Tabs.Screen
@@ -23,7 +23,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ size, color }) => (
-            <Home size={size} color={color} />
+            <Home size={24} color={color} />
           ),
         }}
       />
@@ -32,7 +32,7 @@ export default function TabLayout() {
         options={{
           title: 'Search',
           tabBarIcon: ({ size, color }) => (
-            <Search size={size} color={color} />
+            <Search size={24} color={color} />
           ),
         }}
       />
@@ -41,7 +41,7 @@ export default function TabLayout() {
         options={{
           title: 'Post',
           tabBarIcon: ({ size, color }) => (
-            <Plus size={size} color={color} />
+            <Plus size={24} color={color} />
           ),
         }}
       />
@@ -50,7 +50,7 @@ export default function TabLayout() {
         options={{
           title: 'Favorites',
           tabBarIcon: ({ size, color }) => (
-            <Heart size={size} color={color} />
+            <Heart size={24} color={color} />
           ),
         }}
       />
@@ -59,7 +59,7 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ size, color }) => (
-            <User size={size} color={color} />
+            <User size={24} color={color} />
           ),
         }}
       />

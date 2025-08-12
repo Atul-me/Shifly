@@ -18,13 +18,9 @@ export default function HomeScreen() {
   const [searchValue, setSearchValue] = useState('');
   const [showDrawer, setShowDrawer] = useState(false);
 
-  // Get trending properties
+  // Get properties from data
   const trendingProperties = propertiesData.properties.filter(p => p.trending).slice(0, 5);
-  
-  // Get recommended properties (mix of verified and recent)
-  const recommendedProperties = propertiesData.properties
-    .filter(p => p.verified || p.trending)
-    .slice(0, 10);
+  const recommendedProperties = propertiesData.properties.slice(0, 10);
 
   const handleCityPress = (cityName: string) => {
     updateFilters({ city: cityName });
@@ -74,6 +70,14 @@ export default function HomeScreen() {
             value={searchValue}
             onSubmitEditing={handleSearch}
             style={styles.searchBar}
+            right={() => (
+              <TouchableOpacity 
+                onPress={() => router.push('/(tabs)/search')}
+                style={styles.searchFilterIcon}
+              >
+                <Filter size={20} color="#7f8c8d" />
+              </TouchableOpacity>
+            )}
           />
         </View>
 
@@ -111,41 +115,52 @@ export default function HomeScreen() {
         </View>
 
         {/* Trending Properties */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Trending Properties</Text>
-            <TouchableOpacity onPress={() => router.push('/search')}>
-              <Text style={styles.seeAll}>See All</Text>
-            </TouchableOpacity>
+        {trendingProperties.length > 0 && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Trending Properties</Text>
+              <TouchableOpacity onPress={() => router.push('/(tabs)/search')}>
+                <Text style={styles.seeAll}>See All</Text>
+              </TouchableOpacity>
+            </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {trendingProperties.map((property) => (
+                <View key={property.id} style={styles.propertyCardContainer}>
+                  <PropertyCard 
+                    property={property} 
+                    onPress={() => handlePropertyPress(property.id)}
+                  />
+                </View>
+              ))}
+            </ScrollView>
           </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {trendingProperties.map((property) => (
-              <View key={property.id} style={styles.propertyCardContainer}>
-                <PropertyCard 
-                  property={property} 
-                  onPress={() => handlePropertyPress(property.id)}
-                />
-              </View>
-            ))}
-          </ScrollView>
-        </View>
+        )}
 
         {/* Recommended Properties */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Recommended for You</Text>
-            <TouchableOpacity onPress={() => router.push('/search')}>
-              <Text style={styles.seeAll}>See All</Text>
-            </TouchableOpacity>
+        {recommendedProperties.length > 0 && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Recommended for You</Text>
+              <TouchableOpacity onPress={() => router.push('/(tabs)/search')}>
+                <Text style={styles.seeAll}>See All</Text>
+              </TouchableOpacity>
+            </View>
+            {recommendedProperties.slice(0, 3).map((property) => (
+              <PropertyCard 
+                key={property.id}
+                property={property} 
+                onPress={() => handlePropertyPress(property.id)}
+              />
+            ))}
           </View>
-          {recommendedProperties.slice(0, 3).map((property) => (
-            <PropertyCard 
-              key={property.id}
-              property={property} 
-              onPress={() => handlePropertyPress(property.id)}
-            />
-          ))}
-        </View>
+        )}
+
+        {propertiesData.properties.length === 0 && (
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyTitle}>No Properties Yet</Text>
+            <Text style={styles.emptyText}>Start by posting your first property!</Text>
+          </View>
+        )}
       </ScrollView>
 
       <DrawerModal
@@ -180,6 +195,13 @@ const styles = StyleSheet.create({
   searchBar: {
     backgroundColor: '#f1f2f6',
     elevation: 0,
+    paddingRight: 50,
+  },
+  searchFilterIcon: {
+    position: 'absolute',
+    right: 12,
+    top: 12,
+    padding: 8,
   },
   toggleContainer: {
     flexDirection: 'row',
@@ -215,5 +237,21 @@ const styles = StyleSheet.create({
   },
   propertyCardContainer: {
     width: 300,
+  },
+  emptyState: {
+    alignItems: 'center',
+    padding: 40,
+    marginTop: 50,
+  },
+  emptyTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#7f8c8d',
+    marginBottom: 8,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#95a5a6',
+    textAlign: 'center',
   },
 });
