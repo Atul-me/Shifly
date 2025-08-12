@@ -10,7 +10,7 @@ import { useApp } from '../../context/AppContext';
 import { useAuth } from '../../context/AuthContext';
 import citiesData from '../../data/cities.json';
 import propertiesData from '../../data/properties.json';
-import { Menu, Bell } from 'lucide-react-native';
+import { Menu, Bell, Filter  } from 'lucide-react-native';
 
 export default function HomeScreen() {
   const { filters, updateFilters, searchQuery, setSearchQuery } = useApp([]);
